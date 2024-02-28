@@ -86,7 +86,14 @@ class Action
 			foreach ($user as $key => $value) {
 				$_SESSION['login_' . $key] = $value;
 			}
+			// Log the login activity
+			$user_type = ($_SESSION['login_type'] == 1) ? "Admin" : "Students";
+			$user_id = $username;
+			$login_time = date('Y-m-d H:i:s');
 
+			// Prepare and execute SQL statement to insert data into the database
+			$sql = "INSERT INTO login_logs (user_type, user_id, login_time) VALUES ('$user_type', '$user_id', '$login_time')";
+			$this->db->query($sql);
 			// Check user type
 			if ((int)$_SESSION['login_type'] == 1) {
 				return 1; // Admin user
