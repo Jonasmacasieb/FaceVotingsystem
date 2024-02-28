@@ -1,0 +1,65 @@
+import cv2
+import os
+import tkinter as tk
+from tkinter import messagebox
+
+def show_message():
+    root = tk.Tk()
+    root.withdraw()  # Hide the main window
+    messagebox.showinfo("Capture Completed", "Image capture completed.")
+    root.destroy()
+
+def generate_dataset(output_dir, num_samples_per_person=20):
+    face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
+    webcam = cv2.VideoCapture(0)
+
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+
+    person_name = "student"  # Default name if not provided
+    person_dir = output_dir
+
+    sample_num = 1
+
+    while sample_num <= num_samples_per_person:
+        ret, frame = webcam.read()
+        gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+
+        faces = face_cascade.detectMultiScale(gray_frame, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30))
+
+        for (x, y, w, h) in faces:
+            face_roi = gray_frame[y:y+h, x:x+w]
+            face_roi_resized = cv2.resize(face_roi, (100, 100))  # Resize the face_roi to 100x100
+            cv2.imwrite(os.path.join(person_dir, f"sample_{sample_num}.png"), face_roi_resized)
+
+        cv2.putText(frame, f"Captured {sample_num}/{num_samples_per_person} samples for {person_name}", (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
+        cv2.imshow('Collecting Samples', frame)
+
+        if sample_num == num_samples_per_person:
+            cv2.destroyAllWindows()  # Close the OpenCV window before showing the message
+            show_message()
+            cv2.waitKey(2000)  # Display the completion message for 2 seconds
+            return  # Stop collecting immediately after the specified number of images
+
+        key = cv2.waitKey(500)  # Adjust the delay as needed
+
+        if key == 27:  # Press 'Esc' to exit
+            break
+
+        sample_num += 1
+
+    webcam.release()
+    cv2.destroyAllWindows()
+
+if __name__ == "__main__":
+    dataset_output_dir = r"C:\xampp\htdocs\github\myworkvotingsytem\train_face\images"
+
+    num_samples_per_person = 20
+
+    while True:
+        person_name = input("Enter the name for the next student (Press Enter to exit): ")
+        if not person_name:
+            break
+
+        person_dir = os.path.join(dataset_output_dir, f"{person_name}")
+        generate_dataset(person_dir, num_samples_per_person=num_samples_per_person)

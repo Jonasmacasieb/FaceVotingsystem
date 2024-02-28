@@ -1,0 +1,61 @@
+import cv2
+import os
+import tkinter as tk
+from tkinter import messagebox
+
+def show_message():
+    root = tk.Tk()
+    root.withdraw()
+    messagebox.showinfo("Capture Completed", "Image capture completed.")
+    root.destroy()
+
+def generate_dataset(output_dir, num_samples_per_person=20, person_name="default_student"):
+    face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
+    webcam = cv2.VideoCapture(0)
+
+    person_dir = os.path.join(output_dir, person_name)
+
+    if not os.path.exists(person_dir):
+        os.makedirs(person_dir)
+
+    sample_num = 1
+
+    while sample_num <= num_samples_per_person:
+        ret, frame = webcam.read()
+        gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+
+        faces = face_cascade.detectMultiScale(gray_frame, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30))
+
+        for (x, y, w, h) in faces:
+            face_roi = gray_frame[y:y+h, x:x+w]
+            face_roi_resized = cv2.resize(face_roi, (100, 100))
+            cv2.imwrite(os.path.join(person_dir, f"sample_{sample_num}.png"), face_roi_resized)
+
+        cv2.putText(frame, f"Captured {sample_num}/{num_samples_per_person} samples for {person_name}", (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
+        cv2.imshow('Collecting Samples', frame)
+
+        if sample_num == num_samples_per_person:
+            cv2.destroyAllWindows()
+            show_message()
+            cv2.waitKey(2000)
+            return
+
+        key = cv2.waitKey(500)
+
+        if key == 27:
+            break
+
+        sample_num += 1
+
+    webcam.release()
+    cv2.destroyAllWindows()
+
+if __name__ == "__main__":
+    dataset_output_dir = r"C:\xampp\htdocs\github\myworkvotingsytem\train_face\images"
+    num_samples_per_person = 20
+
+    # Retrieve the user's name from the PHP script (assuming it is sent as a POST parameter)
+    import sys
+    user_name = sys.argv[1] if len(sys.argv) > 1 else "default_student"
+
+    generate_dataset(dataset_output_dir, num_samples_per_person=num_samples_per_person, person_name=user_name)
