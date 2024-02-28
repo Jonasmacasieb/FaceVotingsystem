@@ -232,48 +232,58 @@ class Action
 		}
 	}
 
-
 	function save_admin()
 	{
+		include 'db_connect.php'; // Include database connection
 
-
+		// Extract form data
 		extract($_POST);
+		// Extract file data
+		extract($_FILES);
 
 		// Handle file upload
 		$picture_path = '';
-		if (isset($_FILES['picture']) && $_FILES['picture']['error'] == UPLOAD_ERR_OK) {
+		if (isset($picture) && $picture['error'] == UPLOAD_ERR_OK) {
 			$upload_dir = 'image/'; // Assuming the 'image' folder is in the current directory
-			$uploaded_file = $upload_dir . basename($_FILES['picture']['name']);
-			move_uploaded_file($_FILES['picture']['tmp_name'], $uploaded_file);
-			$picture_path = $uploaded_file;
+			$uploaded_file = $upload_dir . basename($picture['name']);
+			if (move_uploaded_file($picture['tmp_name'], $uploaded_file)) {
+				$picture_path = $uploaded_file;
+			} else {
+				// Handle file upload error
+				return 0; // Return 0 to indicate failure
+			}
 		}
+
+		// Hash password if it's not empty and type is 1
+		$hashed_password = ($type == 1 && !empty($password)) ? md5($password) : '';
 
 		// Construct the data string for SQL query
 		$data = " name = '$name' ";
 		$data .= ", username = '$username' ";
 		$data .= ", picture_path = '$picture_path' "; // Save the file path to the database
 		$data .= ", type = '$type' ";
-
-		// Check if password is not empty, then hash and add to data
-		if ($type == 1 && !empty($password)) {
-			$hashed_password = md5($password);
+		if (!empty($hashed_password)) {
 			$data .= ", password = '$hashed_password' ";
 		}
 
 		// Perform database query to save or update user data
 		if (empty($id)) {
-			$save = $conn->query("INSERT INTO users SET " . $data); // Use SET for INSERT
+			$save_query = "INSERT INTO users SET " . $data;
 		} else {
-			$save = $conn->query("UPDATE users SET " . $data . " WHERE id = " . $id); // Use SET for UPDATE
+			$save_query = "UPDATE users SET " . $data . " WHERE id = " . $id;
 		}
 
-		// Return success or failure indicator
+		// Execute the query
+		$save = $conn->query($save_query);
+
 		if ($save) {
-			return 1; // Return 1 for success
+			return 1;
 		} else {
-			return 0; // Return 0 for failure
+			return 0;
 		}
 	}
+
+
 
 
 

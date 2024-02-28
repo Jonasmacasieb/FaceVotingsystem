@@ -130,7 +130,7 @@
                                                 });
                                                 var currentValue = dataset.data[tooltipItem.index];
                                                 var percentage = ((currentValue / total) * 100).toFixed(2);
-                                                return data.labels[tooltipItem.index] + ": " + percentage + "%";
+                                                return data.labels[tooltipItem.index] + ": " + percentage;
                                             }
                                         }
                                     },
@@ -138,6 +138,7 @@
                                         display: false, // Hide default legend
                                     },
                                 },
+
                             });
                         }
 

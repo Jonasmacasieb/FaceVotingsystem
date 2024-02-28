@@ -98,7 +98,7 @@ include 'db_connect.php';
 												<span class="sr-only">Toggle Dropdown</span>
 											</button>
 											<div class="dropdown-menu">
-												<button class="dropdown-item edit_" href="javascript:void(0)" data-id='<?php echo $row['id'] ?>'>Edit</button>
+												<button class="dropdown-item edit_admin" href="javascript:void(0)" data-id='<?php echo $row['id'] ?>'>Edit</button>
 												<div class="dropdown-divider"></div>
 												<button class="dropdown-item delete_user" href="javascript:void(0)" data-id='<?php echo $row['id'] ?>'>Delete</button>
 
