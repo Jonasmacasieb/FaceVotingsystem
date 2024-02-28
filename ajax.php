@@ -28,7 +28,7 @@ if ($action == 'save_user') {
 }
 
 if ($action == 'save_admin') {
-	$save = $crud->save_user();
+	$save = $crud->save_admin();
 	if ($save)
 		echo $save;
 }

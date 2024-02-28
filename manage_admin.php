@@ -36,26 +36,16 @@ if (isset($_GET['id'])) {
         <div class="form-group">
             <label for="picture">Profile Picture</label>
             <input type="file" name="picture" id="picture" class="form-control-file">
-        </div>
 
-        <div class="form-group">
             <label for="name">Name</label>
             <input type="text" name="name" id="name" class="form-control" value="<?php echo isset($meta['name']) ? $meta['name'] : '' ?>" required>
-        </div>
 
-        <div class="form-group">
             <label for="username">School ID</label>
             <input type="text" name="username" id="username" class="form-control" value="<?php echo isset($meta['username']) ? $meta['username'] : '' ?>" required>
-        </div>
 
-
-
-        <div class="form-group">
             <label for="password">Password</label>
             <input type="password" name="password" id="password" class="form-control" <?php if (!empty($_GET['id'])) echo 'placeholder="Leave blank to keep current password"'; ?> required>
-        </div>
 
-        <div class="form-group">
             <label for="type">User Type</label>
             <select name="type" id="type" class="custom-select">
                 <option value="1" <?php echo isset($meta['type']) && $meta['type'] == 1 ? 'selected' : '' ?>>Admin</option>
@@ -65,29 +55,33 @@ if (isset($_GET['id'])) {
     </form>
 
 
-    <script>
-        $(document).ready(function() {
-            // Form submission code remains unchanged
-            $('#manage-user').submit(function(e) {
-                e.preventDefault();
-                start_load()
-                var formData = new FormData(this);
 
-                $.ajax({
-                    url: 'ajax.php?action=save_admin',
-                    method: 'POST',
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                    success: function(resp) {
-                        if (resp == 1) {
-                            alert_toast("Data successfully saved", 'success')
-                            setTimeout(function() {
-                                location.reload()
-                            }, 1500)
-                        }
+    <script>
+        $('#manage-user').submit(function(e) {
+            e.preventDefault();
+            start_load();
+            var formData = new FormData(this);
+
+            $.ajax({
+                url: 'ajax.php?action=save_admin',
+                method: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(resp) {
+                    if (resp == 1) {
+                        alert_toast("Data successfully saved", 'success');
+                        setTimeout(function() {
+                            location.reload();
+                        }, 1500);
+                    } else {
+                        alert_toast("Failed to save data", 'error');
                     }
-                });
+                },
+                error: function(xhr, status, error) {
+                    console.error(xhr.responseText);
+                    alert_toast("Error: " + error, 'error');
+                }
             });
         });
     </script>
