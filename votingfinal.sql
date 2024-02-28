@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 22, 2024 at 07:24 AM
+-- Generation Time: Feb 28, 2024 at 02:03 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -18,21 +18,8 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `votingwithface`
+-- Database: `votingfinal`
 --
-
--- --------------------------------------------------------
-
---
--- Table structure for table `accs_hist`
---
-
-CREATE TABLE `accs_hist` (
-  `accs_id` int(11) NOT NULL,
-  `accs_date` date NOT NULL,
-  `accs_prsn` varchar(3) NOT NULL,
-  `accs_added` datetime NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 -- --------------------------------------------------------
 
@@ -67,13 +54,23 @@ INSERT INTO `category_list` (`id`, `category`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `img_dataset`
+-- Table structure for table `login_logs`
 --
 
-CREATE TABLE `img_dataset` (
-  `img_id` int(11) NOT NULL,
-  `img_person` varchar(3) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+CREATE TABLE `login_logs` (
+  `id` int(11) NOT NULL,
+  `user_type` varchar(255) NOT NULL,
+  `user_id` varchar(15) NOT NULL,
+  `login_time` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `login_logs`
+--
+
+INSERT INTO `login_logs` (`id`, `user_type`, `user_id`, `login_time`) VALUES
+(1, 'Students', '0053250235', '2024-02-28 01:17:34'),
+(2, 'Students', '0053250235', '2024-02-28 01:21:30');
 
 -- --------------------------------------------------------
 
@@ -91,22 +88,8 @@ CREATE TABLE `party_list` (
 --
 
 INSERT INTO `party_list` (`id`, `partylist`) VALUES
-(4, 'jonas'),
-(5, 'joansdw');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `prs_mstr`
---
-
-CREATE TABLE `prs_mstr` (
-  `prs_nbr` varchar(3) NOT NULL,
-  `prs_name` varchar(50) NOT NULL,
-  `prs_skill` varchar(30) NOT NULL,
-  `prs_active` varchar(1) NOT NULL DEFAULT 'Y',
-  `prs_added` datetime NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+(6, 'Partido Federal ng Pilipinas'),
+(7, 'PROMDI');
 
 -- --------------------------------------------------------
 
@@ -122,21 +105,21 @@ CREATE TABLE `users` (
   `department` varchar(100) NOT NULL,
   `course` varchar(50) NOT NULL,
   `section` varchar(50) NOT NULL,
-  `type` tinyint(1) NOT NULL DEFAULT 3 COMMENT '1+admin , 2 = users, 3 = staff',
+  `type` tinyint(1) NOT NULL DEFAULT 2 COMMENT '1+admin , 2 = users',
   `has_voted` tinyint(1) DEFAULT 0,
   `picture_path` text NOT NULL,
-  `online_status` enum('online','offline') NOT NULL DEFAULT 'offline',
-  `date` datetime DEFAULT NULL
+  `online_status` enum('online','offline') NOT NULL DEFAULT 'offline'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `name`, `username`, `password`, `department`, `course`, `section`, `type`, `has_voted`, `picture_path`, `online_status`, `date`) VALUES
-(1, 'Administrator', '01-2359-235', '21232f297a57a5a743894a0e4a801fc3', '', '', '', 1, 0, 'image/3.png', 'online', NULL),
-(165, 'Albert cayabyab', '20-0180-985', '', 'BSIT', 'IT', '4-1', 2, 0, '', 'online', '2024-02-22 07:09:09'),
-(166, 'Aldwin Lester Solis', '20-0551-153', '', 'BSIT', 'IT', '4-1', 2, 0, '', 'offline', NULL);
+INSERT INTO `users` (`id`, `name`, `username`, `password`, `department`, `course`, `section`, `type`, `has_voted`, `picture_path`, `online_status`) VALUES
+(1, 'Administrator', '01-2359-235', '21232f297a57a5a743894a0e4a801fc3', '', '', '', 1, 0, 'image/3.png', 'online'),
+(115, 'jonas', '0053250235', '', 'BSIT', 'IT', '4-1', 2, 0, 'image/istockphoto-461164967-612x612.jpg', 'online'),
+(116, 'sample2', '20-2352-352', '', 'BSCRIM', 'Criminology', '4-1', 2, 0, '', 'offline'),
+(117, 'sample3', '01-0000-000', '', 'BSCRIM', 'Criminology', '4-2', 2, 0, '', 'offline');
 
 -- --------------------------------------------------------
 
@@ -182,43 +165,7 @@ INSERT INTO `votes` (`id`, `voting_id`, `category_id`, `voting_opt_id`, `user_id
 (106, 25, 6, 97, 112),
 (107, 25, 11, 98, 112),
 (108, 25, 6, 97, 108),
-(109, 25, 11, 98, 108),
-(110, 26, 6, 99, 116),
-(111, 26, 11, 102, 116),
-(112, 26, 6, 100, 115),
-(113, 26, 11, 101, 115),
-(114, 26, 6, 99, 117),
-(115, 26, 11, 102, 117),
-(116, 27, 6, 103, 117),
-(117, 27, 11, 107, 117),
-(118, 27, 6, 105, 108),
-(119, 27, 11, 106, 108),
-(120, 16, 6, 76, 106),
-(121, 16, 6, 76, 106),
-(122, 16, 6, 77, 117),
-(123, 26, 6, 99, 115),
-(124, 26, 11, 101, 115),
-(125, 26, 6, 99, 124),
-(126, 26, 11, 102, 124),
-(127, 26, 6, 99, 119),
-(128, 26, 11, 102, 119),
-(129, 26, 6, 100, 118),
-(130, 26, 11, 101, 118),
-(131, 28, 6, 110, 115),
-(132, 28, 11, 111, 115),
-(133, 28, 6, 109, 119),
-(134, 28, 11, 112, 119),
-(135, 28, 6, 109, 106),
-(136, 28, 11, 111, 106),
-(137, 28, 6, 109, 112),
-(138, 28, 11, 111, 112),
-(139, 28, 6, 109, 113),
-(140, 28, 6, 109, 114),
-(141, 28, 11, 111, 114),
-(142, 28, 6, 109, 107),
-(143, 28, 11, 111, 107),
-(144, 28, 6, 109, 108),
-(145, 28, 11, 112, 108);
+(109, 25, 11, 98, 108);
 
 -- --------------------------------------------------------
 
@@ -239,8 +186,7 @@ CREATE TABLE `voting_cat_settings` (
 
 INSERT INTO `voting_cat_settings` (`id`, `voting_id`, `category_id`, `max_selection`) VALUES
 (9, 16, 6, 2),
-(10, 17, 6, 2),
-(11, 27, 11, 2);
+(10, 17, 6, 2);
 
 -- --------------------------------------------------------
 
@@ -262,10 +208,7 @@ CREATE TABLE `voting_list` (
 --
 
 INSERT INTO `voting_list` (`id`, `title`, `description`, `time_duration`, `votedate`, `is_default`) VALUES
-(16, 'Homeroom for CSS', 'for css', '24:00:00', NULL, 0),
-(26, 'new', 'new', '08:00:00', NULL, 0),
-(28, 'with img', 'd', '08:00:00', NULL, 1),
-(30, 'jonas', 'jonas', '08:00:00', '2024-02-21', 0);
+(26, 'sample 1', 'description sample', '08:00:00', '2024-02-29', 1);
 
 -- --------------------------------------------------------
 
@@ -324,31 +267,11 @@ INSERT INTO `voting_opt` (`id`, `voting_id`, `category_id`, `image_path`, `opt_t
 (95, 24, 6, '', 'Albertw', '', 4),
 (96, 24, 11, '', 'ii', '', 4),
 (97, 25, 6, '', 'harold', '', 4),
-(98, 25, 11, '', 'Albert', '', 4),
-(99, 26, 6, '', 'harold', '', 4),
-(100, 26, 6, '', 'Albert', '', 5),
-(101, 26, 11, '', 'MARX  RANZELLE V. DY ', '', 4),
-(102, 26, 11, '', 'joas', '', 5),
-(103, 27, 6, '', 'harold', '', 4),
-(105, 27, 6, '', 'Albert', '', 5),
-(106, 27, 11, '', 'joas', '', 4),
-(107, 27, 11, '', 'MARX  RANZELLE V. DY ', '', 5),
-(108, 27, 11, '', 'r2', '', 5),
-(109, 28, 6, '1708220760_10363530_10152823736304179_6985184285259385965_n.jpg', 'harold', '', 4),
-(110, 28, 6, '1708220760_10615529_10152823736319179_5245462818405751638_n.jpg', 'Albert', '', 4),
-(111, 28, 11, '1708220760_Aero_SlateWin_by_StudioTwentyEight.jpg', 'joas', '', 4),
-(112, 28, 11, '1708220820_DBZ_OP_Naruto__Melee_by_Risachantag.jpg', 'MARX  RANZELLE V. DY ', '', 4);
+(98, 25, 11, '', 'Albert', '', 4);
 
 --
 -- Indexes for dumped tables
 --
-
---
--- Indexes for table `accs_hist`
---
-ALTER TABLE `accs_hist`
-  ADD PRIMARY KEY (`accs_id`),
-  ADD KEY `accs_date` (`accs_date`);
 
 --
 -- Indexes for table `category_list`
@@ -357,22 +280,16 @@ ALTER TABLE `category_list`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `img_dataset`
+-- Indexes for table `login_logs`
 --
-ALTER TABLE `img_dataset`
-  ADD PRIMARY KEY (`img_id`);
+ALTER TABLE `login_logs`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `party_list`
 --
 ALTER TABLE `party_list`
   ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `prs_mstr`
---
-ALTER TABLE `prs_mstr`
-  ADD PRIMARY KEY (`prs_nbr`);
 
 --
 -- Indexes for table `users`
@@ -415,46 +332,46 @@ ALTER TABLE `voting_opt`
 --
 
 --
--- AUTO_INCREMENT for table `accs_hist`
---
-ALTER TABLE `accs_hist`
-  MODIFY `accs_id` int(11) NOT NULL AUTO_INCREMENT;
-
---
 -- AUTO_INCREMENT for table `category_list`
 --
 ALTER TABLE `category_list`
   MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
+-- AUTO_INCREMENT for table `login_logs`
+--
+ALTER TABLE `login_logs`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
 -- AUTO_INCREMENT for table `party_list`
 --
 ALTER TABLE `party_list`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=167;
+  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=118;
 
 --
 -- AUTO_INCREMENT for table `votes`
 --
 ALTER TABLE `votes`
-  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=146;
+  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=110;
 
 --
 -- AUTO_INCREMENT for table `voting_cat_settings`
 --
 ALTER TABLE `voting_cat_settings`
-  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `voting_list`
 --
 ALTER TABLE `voting_list`
-  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT for table `voting_logs`
@@ -466,7 +383,7 @@ ALTER TABLE `voting_logs`
 -- AUTO_INCREMENT for table `voting_opt`
 --
 ALTER TABLE `voting_opt`
-  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=113;
+  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=99;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
