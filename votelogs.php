@@ -40,6 +40,12 @@
                     visibility: visible;
                 }
 
+                #headerlogo {
+                    /* Add this rule to ensure the header is visible when printing */
+                    visibility: visible;
+                    display: block;
+                }
+
                 #printableTable {
                     position: absolute;
                     left: 0;
@@ -141,6 +147,12 @@
                 color: #000;
                 font-size: 15px;
             }
+
+            @media screen {
+                #headerlogo {
+                    display: none;
+                }
+            }
         </style>
     </head>
 
@@ -176,8 +188,17 @@
 
 
 
-
         <table id="printableTable" border="1" class="table table-bordered table-hover">
+
+            <div id="headerlogo">
+
+                <img src="perps logo.png" alt="Logo" />
+
+                <h1>Perpetual Help College of Pangasinan</h1>
+                <h3>Montemayor St., Malasiqui Pangasinan</h3>
+                <h2>Voting Management System With Facial Recognition</h2>
+
+            </div>
             <thead>
 
                 <tr>
@@ -209,7 +230,7 @@
         <script>
             document.getElementById("printButton").addEventListener("click", function() {
                 // Hide all elements except the table before printing
-                var elementsToHide = document.querySelectorAll("body > :not(#printableTable)");
+                var elementsToHide = document.querySelectorAll("body > :not(#printableTable, #headerlogo)");
                 elementsToHide.forEach(function(element) {
                     element.style.visibility = "hidden";
                 });
