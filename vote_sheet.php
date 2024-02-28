@@ -41,6 +41,16 @@ $settings = $conn->query("SELECT * FROM voting_cat_settings where voting_id=" . 
 while ($row = $settings->fetch_assoc()) {
 	$set_arr[$row['category_id']] = $row;
 }
+
+// Fetch party list information
+$partyListQuery = $conn->query("SELECT * FROM party_list WHERE id IN (SELECT partylist_id FROM voting_opt WHERE voting_id = '" . $id . "')");
+
+// Create an associative array to store party list information
+$partyListData = [];
+while ($party = $partyListQuery->fetch_assoc()) {
+	$partyListData[$party['id']] = $party;
+}
+
 ?>
 
 <head>
@@ -224,8 +234,15 @@ while ($row = $settings->fetch_assoc()) {
 											<br>
 											<div class="text-center">
 												<large class="text-center"><b><?php echo ucwords($candidate['opt_txt']) ?></b></large>
-
+												<?php
+												// Display party list information here
+												if (isset($partyListData[$candidate['partylist_id']])) {
+													$party = $partyListData[$candidate['partylist_id']];
+													echo "<p><em>Partylist: {$party['partylist']}</em></p>";
+												}
+												?>
 											</div>
+
 										</div>
 									</div>
 

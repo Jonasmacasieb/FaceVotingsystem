@@ -289,15 +289,17 @@
 
                     // Create a bar chart for each department
                     datasets.forEach(function(departmentDataset) {
-                        var ctx = document.createElement('canvas').getContext('2d');
+                        var container = document.createElement('div'); // Create a container div for each chart
+                        container.style.marginBottom = '50px'; // Add some bottom margin to separate the charts
+                        document.getElementById('bar-container').appendChild(container); // Append container to chart-container
 
-                        document.getElementById('bar-container').appendChild(ctx.canvas); // Append canvas to chart-container
+                        var ctx = document.createElement('canvas').getContext('2d');
+                        container.appendChild(ctx.canvas); // Append canvas to container
 
                         new Chart(ctx, {
                             type: 'bar',
                             data: {
-                                labels: Object.keys(departmentData[departmentDataset.label]).map(section => departmentDataset.label + (section ? ' - ' + section : '')),
-
+                                labels: Object.keys(departmentData[departmentDataset.label]).map(section => departmentDataset.label + section),
                                 datasets: [departmentDataset]
                             },
                             options: {
