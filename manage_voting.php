@@ -71,7 +71,8 @@ while ($row = $settings->fetch_assoc()) {
 							</b></small>
 						<!-- new time -->
 						<small><b><br>
-								<?php echo $time_duration; ?> ours
+								<?php echo $starttime . " - " . $endtime; ?>
+
 							</b></small>
 					</div>
 

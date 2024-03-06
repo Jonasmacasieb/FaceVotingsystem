@@ -18,7 +18,8 @@
 		<?php if ($_SESSION['login_type'] == 1) : ?>
 			<a href="index.php?page=users" class="nav-item nav-users"><span class='icon-field'><i class="fa fa-users"></i></span> Users</a>
 			<a href="index.php?page=ongoingvotes" class="nav-item nav-ongoingvotes"><span class='icon-field'><i class="fa fa-chart-area"></i></span> On Going Votes </a>
-			<a href="index.php?page=votelogs" class="nav-item nav-votelogs"><span class='icon-field'><i class="fa fa-file"></i></span> Logs </a>
+			<a href="index.php?page=logs" class="nav-item nav-logs"><span class='icon-field'><i class="fa fa-file"></i></span> Logs </a>
+			<a href="index.php?page=votelogs" class="nav-item nav-votelogs"><span class='icon-field'><i class="fa fa-file"></i></span> Voter Logs </a>
 			<a href="index.php?page=departmentgraph" class="nav-item nav-departmentgraph"><span class='icon-field'><i class="fa fa-chart-bar"></i></span> Departments Graph </a>
 
 		<?php endif; ?>

@@ -11,7 +11,8 @@
         font-family: Arial, sans-serif;
         color: #fff;
         font-size: 20px;
-        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        text-shadow: 2px 2px 4px yellow;
+
         margin-top: 10px;
         /* Adjust margin for better alignment */
     }
@@ -132,7 +133,7 @@
     }
 </style>
 
-<nav class="navbar navbar-dark fixed-top" style="padding: 0; background: linear-gradient(to left, #3498db, #87ceeb); box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+<nav class="navbar navbar-dark fixed-top" style="padding: 0; background: #00008B; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
     <div class="container-fluid mt-2 mb-2">
         <div class="col-lg-12">
             <div class="col-md-1 float-left" style="display: flex;">

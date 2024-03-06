@@ -81,13 +81,15 @@
 						</div>
 						<div class="card-body">
 							<div class="form-group">
-								<label class="control-label">Time Duration</label>
-								<select name="time_duration" class="form-control">
-									<option value="8:00:00">8 hours</option>
+								<label class="control-label">Start</label>
+								<input type="time" class="form-control" name="starttime">
+							</div>
 
-
-
-								</select>
+						</div>
+						<div class="card-body">
+							<div class="form-group">
+								<label class="control-label">End</label>
+								<input type="time" class="form-control" name="endtime">
 							</div>
 						</div>
 						<div class="card-footer">

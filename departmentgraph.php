@@ -250,7 +250,7 @@
                     function getRandomColor(count) {
                         // Define a fixed set of colors
                         const fixedColors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff', '#c0c0c0', '#808080', '#800000', '#008000'];
-
+                        // bsit pink  crim maron b
                         // Return a slice of the fixed colors array based on the count
                         return fixedColors.slice(0, count);
                     }

@@ -41,7 +41,9 @@ class Action
 			// Log the login activity
 			$user_type = ($_SESSION['login_type'] == 1) ? "Admin" : "Students";
 			$user_id = $username;
-			$login_time = date('Y-m-d H:i:s');
+
+			date_default_timezone_set('Asia/Manila');
+			$login_time = date('Y-m-d H:i:s A');
 
 			// Prepare and execute SQL statement to insert data into the database
 			$sql = "INSERT INTO login_logs (user_type, user_id, login_time) VALUES ('$user_type', '$user_id', '$login_time')";
@@ -89,7 +91,9 @@ class Action
 			// Log the login activity
 			$user_type = ($_SESSION['login_type'] == 1) ? "Admin" : "Students";
 			$user_id = $username;
-			$login_time = date('Y-m-d H:i:s');
+
+			date_default_timezone_set('Asia/Manila');
+			$login_time = date('Y-m-d H:i:s A');
 
 			// Prepare and execute SQL statement to insert data into the database
 			$sql = "INSERT INTO login_logs (user_type, user_id, login_time) VALUES ('$user_type', '$user_id', '$login_time')";
@@ -104,6 +108,7 @@ class Action
 			return 3; // User not found
 		}
 	}
+
 
 
 
@@ -138,6 +143,10 @@ class Action
 		include('db_connect.php');
 		$conn->query("UPDATE users SET online_status = 'offline' WHERE id = $user_id");
 
+		// Update the logout time in the login_logs table
+		$logout_time = date('Y-m-d H:i:s'); // Current timestamp
+		$conn->query("UPDATE login_logs SET logout_time = '$logout_time' WHERE user_id = $user_id");
+
 		// Redirect based on user type
 		if ($userType == 1) {
 			// Admin logout, redirect to admin page
@@ -147,6 +156,7 @@ class Action
 			header("location: trylogin.php");
 		}
 	}
+
 
 
 
@@ -211,7 +221,6 @@ class Action
 		$data .= ", username = '$username' ";
 		$data .= ", picture_path = '$picture_path' "; // Save the file path to the database
 		$data .= ", department = '$department' "; // Fix: Concatenate to $data instead of overwriting it
-		$data .= ", section = '$section' "; // Fix: Concatenate to $data instead of overwriting it
 		$data .= ", course = '$course' "; // Fix: Concatenate to $data instead of overwriting it
 		$data .= ", type = '$type' ";
 
@@ -384,8 +393,9 @@ class Action
 		// Construct the data string for SQL query
 		$data = " title = '$title' ";
 		$data .= " , description = '$description' ";
-		$data .= " , time_duration = '$time_duration' ";
 		$data .= " , votedate = '$votedate' ";
+		$data .= " , starttime = '$starttime' ";
+		$data .= " , endtime = '$endtime' ";
 
 		if (empty($id)) {
 			// If id is empty, perform an INSERT operation
