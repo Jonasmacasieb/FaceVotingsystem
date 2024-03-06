@@ -198,7 +198,10 @@ while ($party = $partyListQuery->fetch_assoc()) {
 							<h3 class="serif-font"><b><?php echo $title ?></b></h3>
 							<small class="serif-description1"><b><?php echo $description; ?></b></small>
 							<br>
-							<small class="serif-description"><b><?php echo $time_duration; ?></b></small>
+							<small class="serif-description"><b><?php echo $starttime . " - " . $endtime; ?></b></small>
+							<br>
+
+							<small class="serif-description"><b><?php echo $votedate; ?></b></small>
 
 						</div>
 

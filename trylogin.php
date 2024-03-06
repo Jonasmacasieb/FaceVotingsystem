@@ -207,11 +207,29 @@
       <h2>Voting Management system with Facial Recognition </h2>
       <!-- <h2>for Perpetual Help College of Pangasinan</h2> -->
       <form id="login-form" class="fl" action="" method="post">
-        <input class="itpw" type="text" name="username" placeholder="School ID" maxlength=11><br>
+        <input class="itpw" type="text" name="username" placeholder="School ID" maxlength="11" oninput="formatSchoolID(this)">
+        <br>
         <input class="its" type="submit" name="login" value="Proceed">
       </form>
     </div>
   </div>
+  <script>
+    function formatSchoolID(input) {
+      // Remove all non-digit characters
+      var schoolID = input.value.replace(/\D/g, '');
+
+      // Apply the pattern "00-0000-000"
+      if (schoolID.length > 2) {
+        schoolID = schoolID.substring(0, 2) + '-' + schoolID.substring(2);
+      }
+      if (schoolID.length > 7) {
+        schoolID = schoolID.substring(0, 7) + '-' + schoolID.substring(7);
+      }
+
+      // Set the formatted value back to the input
+      input.value = schoolID;
+    }
+  </script>
 
   <script>
     $('#login-form').submit(function(e) {

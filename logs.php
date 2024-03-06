@@ -40,6 +40,12 @@ while ($row = $opts->fetch_assoc()) {
                 visibility: visible;
             }
 
+            #headerlogo {
+                /* Add this rule to ensure the header is visible when printing */
+                visibility: visible;
+                display: block;
+            }
+
             #printableTable {
                 position: absolute;
                 left: 0;
@@ -141,6 +147,12 @@ while ($row = $opts->fetch_assoc()) {
             color: #000;
             font-size: 15px;
         }
+
+        @media screen {
+            #headerlogo {
+                display: none;
+            }
+        }
     </style>
 </head>
 
@@ -149,37 +161,163 @@ while ($row = $opts->fetch_assoc()) {
     <button class="float-right text-white mt-3 button-15" id="printButton"> <i class="fa fa-print" style="color: black;"></i> Print</button>
     <br><br><br>
 
-    <h2>Voters Logs</h2>
+    <h2>Logs</h2>
+    <br>
     <?php
     include('db_connect.php');
     $cats = $conn->query("SELECT * FROM category_list WHERE id IN (SELECT category_id FROM voting_opt WHERE voting_id = '" . $id . "')");
     ?>
 
+
+
+
+    <?php
+    function fetchAdminLoginActivities($conn)
+    {
+        // Set the timezone to Manila
+        date_default_timezone_set('Asia/Manila');
+
+        // SQL query to fetch admin login activities
+        $sql = "SELECT *, DATE_FORMAT(login_time, '%Y-%m-%d %h:%i:%s %p') AS formatted_login_time 
+            FROM login_logs 
+            WHERE user_type =  'Admin'
+            ORDER BY login_time DESC";
+
+        // Execute the query
+        $result = mysqli_query($conn, $sql);
+
+        // Array to store login activities
+        $loginActivities = array();
+
+        // Fetch login activities and format time
+        while ($row = mysqli_fetch_assoc($result)) {
+            // Add formatted login time to the row
+            $row['formatted_login_time'] = date('Y-m-d h:i:s A', strtotime($row['login_time']));
+            $loginActivities[] = $row;
+        }
+
+        // Return login activities
+        return $loginActivities;
+    }
+
+    // Call the function to fetch admin login activities
+    $adminLoginActivities = fetchAdminLoginActivities($conn);
+    ?>
+
+
     <table id="printableTable" border="1" class="table table-bordered table-hover">
 
-        <thead>
-            <tr class="tr">
-                <th class="print-header">Names</th> <!-- Print header style -->
 
+        <thead>
+
+            <tr>
+                <th>User type</th>
+                <th>School ID</th>
+                <th>Login Time</th>
+                <th>Logout Time</th>
             </tr>
         </thead>
         <tbody>
-            <?php
-            // Fetching users who voted
-            $mycats = $conn->query("SELECT name, id FROM users WHERE id IN (SELECT user_id FROM votes WHERE voting_id = '" . $id . "')");
-            while ($rowUser = $mycats->fetch_assoc()) : ?>
+            <?php foreach ($adminLoginActivities as $adminactivity) : ?>
                 <tr>
-                    <td class="text-center print-data"><?php echo $rowUser['name']; ?></td> <!-- Print data style -->
+                    <td>
+                        <center> <?php echo $adminactivity['user_type']; ?></center>
+                    </td>
+                    <td>
+                        <center> <?php echo $adminactivity['user_id']; ?></center>
 
+                    <td>
+                        <center><?php echo $adminactivity['formatted_login_time']; ?></center>
+                    </td>
                 </tr>
-            <?php endwhile; ?>
+            <?php endforeach; ?>
+
+
+
+
+
         </tbody>
     </table>
+    <?php
+    function fetchUserLoginActivities($conn)
+    {
+        // Set the timezone to Manila
+        date_default_timezone_set('Asia/Manila');
+
+        // SQL query to fetch user login activities with formatted login and logout times
+        $sql = "SELECT *, 
+                DATE_FORMAT(login_time, '%Y-%m-%d %h:%i:%s %p') AS formatted_login_time,
+                DATE_FORMAT(logout_time, '%Y-%m-%d %h:%i:%s %p') AS formatted_logout_time 
+                FROM login_logs 
+                WHERE user_type = 'Students'
+                ORDER BY login_time DESC";
+
+        // Execute the query
+        $result = mysqli_query($conn, $sql);
+
+        // Array to store login activities
+        $loginActivities = array();
+
+        // Fetch login activities and format time
+        while ($row = mysqli_fetch_assoc($result)) {
+            $loginActivities[] = $row;
+        }
+
+        // Return login activities
+        return $loginActivities;
+    }
+
+    // Call the function to fetch user login activities
+    $userLoginActivities = fetchUserLoginActivities($conn);
+
+    ?>
+
+    <table id="printableTable" border="1" class="table table-bordered table-hover">
+
+
+        <thead>
+
+            <tr>
+                <th>User type</th>
+                <th>Department</th>
+                <th>School ID</th>
+                <th>Login Time</th>
+                <th>Logout Time</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <?php foreach ($userLoginActivities as $useractivity) : ?>
+                <tr>
+                    <td>
+                        <center> <?php echo $useractivity['user_type']; ?></center>
+                    </td>
+                    <td>
+                        <center> <?php echo ['department']; ?></center>
+                    </td>
+                    <td>
+                        <center> <?php echo $useractivity['user_id']; ?></center>
+                        <!-- user specific -->
+                    </td>
+                    <td>
+                        <center><?php echo $useractivity['formatted_login_time']; ?></center>
+                    </td>
+                    <td>
+                        <center><?php echo $useractivity['formatted_logout_time']; ?></center>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+
+
+        </tbody>
+    </table>
+
+
 
     <script>
         document.getElementById("printButton").addEventListener("click", function() {
             // Hide all elements except the table before printing
-            var elementsToHide = document.querySelectorAll("body > :not(#printableTable)");
+            var elementsToHide = document.querySelectorAll("body > :not(#printableTable, #headerlogo)");
             elementsToHide.forEach(function(element) {
                 element.style.visibility = "hidden";
             });
